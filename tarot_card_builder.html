@@ -1635,7 +1635,7 @@ async function exportCard() {
   const host = document.createElement('div');
   host.setAttribute('aria-hidden', 'true');
   host.style.cssText =
-    `position:fixed;left:-10000px;top:0;width:${EXPORT_W}px;height:${EXPORT_H}px;overflow:visible;pointer-events:none;`;
+    `position:fixed;left:0;top:0;width:${EXPORT_W}px;height:${EXPORT_H}px;overflow:visible;pointer-events:none;opacity:0;z-index:-1;`;
 
   const clone = card.cloneNode(true);
   clone.removeAttribute('id');
@@ -1677,15 +1677,11 @@ async function exportCard() {
       backgroundColor: d.colorBg,
       logging: false,
       scrollX: 0,
-      scrollY: 0
+      scrollY: 0,
+      foreignObjectRendering: false
     };
 
-    let canvas;
-    try {
-      canvas = await html2canvas(clone, { ...canvasOpts, foreignObjectRendering: true });
-    } catch (e1) {
-      canvas = await html2canvas(clone, { ...canvasOpts, foreignObjectRendering: false });
-    }
+    const canvas = await html2canvas(clone, canvasOpts);
 
     const num = document.getElementById('cardNumber').value || 'card';
     const nameEn = document.getElementById('nameEn').value || 'tarot';
