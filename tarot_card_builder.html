@@ -620,12 +620,33 @@ body {
   font-family: 'Crimson Text', Georgia, serif;
   font-size: var(--label-size);
   font-weight: 700;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
   color: var(--label-color);
   margin-bottom: 8px;
-  line-height: 1;
+  line-height: 1.3;
+  text-align: center;
   transition: opacity 0.2s;
+}
+
+.box-label .label-ar {
+  font-family: 'Amiri', 'Crimson Text', Georgia, serif;
+  letter-spacing: 0.1px;
+}
+
+.box-label .label-en {
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.box-label .label-sep {
+  opacity: 0.85;
+  margin: 0 3px;
+}
+
+.box-label .label-ar-img {
+  width: auto;
+  height: 1.1em;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 .deco-content.has-content .box-label { opacity: 0.9; }
@@ -710,7 +731,8 @@ body {
 }
 
 .box-text-ar.ar-rasterized::before,
-.title-name-ar.ar-rasterized::before {
+.title-name-ar.ar-rasterized::before,
+.footer-name-ar.ar-rasterized::before {
   display: none;
   content: none;
 }
@@ -813,9 +835,9 @@ body {
 .card-footer {
   position: absolute;
   left: 36px;
-  top: 1110px;
+  top: 1102px;
   width: 628px;
-  height: 64px;
+  height: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -834,12 +856,39 @@ body {
   display: none;
 }
 
-.footer-number {
+.footer-title {
   font-family: 'Crimson Text', Georgia, serif;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 2px 10px;
+  direction: ltr;
+  unicode-bidi: plaintext;
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+  transform: rotate(180deg);
+  max-width: 100%;
+}
+
+.footer-title .footer-star,
+.footer-title .footer-num,
+.footer-title .footer-name-en {
   font-size: var(--footer-num-size);
-  font-weight: 700;
   color: var(--footer-num-color);
-  line-height: 1;
+  font-weight: 700;
+}
+
+.footer-title .footer-name-ar {
+  font-family: 'Amiri', 'Crimson Text', Georgia, serif;
+  font-size: var(--footer-num-size);
+  color: var(--footer-num-color);
+  font-weight: 700;
+}
+
+.footer-title .footer-dash,
+.footer-title .footer-slash {
+  opacity: 0.7;
 }
 
 /* Scale card for screen */
@@ -982,7 +1031,7 @@ body {
 
       <div class="style-section-title">التذييل · Footer</div>
       <div class="element-style">
-        <div class="element-style-name">رقم الكرت — التذييل</div>
+        <div class="element-style-name">عنوان الكرت — التذييل (معكوس)</div>
         <div class="element-style-controls">
           <input type="range" id="sizeFooterNum" min="16" max="44" value="28" oninput="updateCard()">
           <span class="size-val" id="valSizeFooterNum">28px</span>
@@ -1150,7 +1199,12 @@ body {
         </svg>
         <div class="deco-frame-inner">
           <div class="deco-content" id="reversedContent">
-            <div class="box-label">▼ المعكوس · Reversed</div>
+            <div class="box-label">
+              <span class="label-icon">▼</span>
+              <span class="label-ar">المعكوس</span>
+              <span class="label-sep">·</span>
+              <span class="label-en">Reversed</span>
+            </div>
             <div class="box-text-en" id="reversedEnDisplay"></div>
             <div class="box-text-divider" id="reversedDivider"></div>
             <div class="box-text-ar" id="reversedArDisplay"></div>
@@ -1186,7 +1240,12 @@ body {
         </svg>
         <div class="deco-frame-inner">
           <div class="deco-content" id="uprightContent">
-            <div class="box-label">▲ الصحيح · Upright</div>
+            <div class="box-label">
+              <span class="label-icon">▲</span>
+              <span class="label-ar">الصحيح</span>
+              <span class="label-sep">·</span>
+              <span class="label-en">Upright</span>
+            </div>
             <div class="box-text-en" id="uprightEnDisplay"></div>
             <div class="box-text-divider" id="uprightDivider"></div>
             <div class="box-text-ar" id="uprightArDisplay"></div>
@@ -1197,7 +1256,17 @@ body {
       <!-- Footer -->
       <div class="card-footer">
         <div class="footer-ornament is-hidden" id="footerOrnament">❧</div>
-        <div class="footer-number" id="footerNumberDisplay"></div>
+        <div class="footer-title" id="footerTitleDisplay">
+          <span id="footerWrap" style="display:none">
+            <span class="footer-star">★</span>
+            <span class="footer-num" id="footerNumberDisplay"></span>
+            <span class="footer-dash" id="footerDash"> — </span>
+            <span class="footer-name-ar" id="footerNameArDisplay"></span>
+            <span class="footer-slash" id="footerNameSlash"> / </span>
+            <span class="footer-name-en" id="footerNameEnDisplay"></span>
+            <span class="footer-star">★</span>
+          </span>
+        </div>
       </div>
 
     </div>
@@ -1414,27 +1483,40 @@ function syncTextBox(enId, arId, dividerId, contentId) {
   content.classList.toggle('has-content', hasEn || hasAr);
 }
 
-function updateCard() {
+function syncTitleBlock(wrapId, fields) {
   const num = document.getElementById('cardNumber').value;
   const nameAr = document.getElementById('nameAr').value;
   const nameEn = document.getElementById('nameEn').value;
-
-  const titleWrap = document.getElementById('titleWrap');
   const hasTitle = num || nameAr || nameEn;
-  titleWrap.style.display = hasTitle ? 'inline' : 'none';
 
-  document.getElementById('titleNumberDisplay').textContent = num;
-  document.getElementById('titleNameArDisplay').textContent = nameAr;
-  document.getElementById('titleNameEnDisplay').textContent = nameEn;
-  document.getElementById('titleDash').style.display =
+  document.getElementById(wrapId).style.display = hasTitle ? 'inline' : 'none';
+  document.getElementById(fields.num).textContent = num;
+  document.getElementById(fields.nameAr).textContent = nameAr;
+  document.getElementById(fields.nameEn).textContent = nameEn;
+  document.getElementById(fields.dash).style.display =
     num && (nameAr || nameEn) ? 'inline' : 'none';
-  document.getElementById('titleNameSlash').style.display =
+  document.getElementById(fields.slash).style.display =
     nameAr && nameEn ? 'inline' : 'none';
-  document.getElementById('titleNumberDisplay').style.display = num ? 'inline' : 'none';
-  document.getElementById('titleNameArDisplay').style.display = nameAr ? 'inline' : 'none';
-  document.getElementById('titleNameEnDisplay').style.display = nameEn ? 'inline' : 'none';
+  document.getElementById(fields.num).style.display = num ? 'inline' : 'none';
+  document.getElementById(fields.nameAr).style.display = nameAr ? 'inline' : 'none';
+  document.getElementById(fields.nameEn).style.display = nameEn ? 'inline' : 'none';
+}
 
-  document.getElementById('footerNumberDisplay').textContent = num;
+function updateCard() {
+  syncTitleBlock('titleWrap', {
+    num: 'titleNumberDisplay',
+    nameAr: 'titleNameArDisplay',
+    nameEn: 'titleNameEnDisplay',
+    dash: 'titleDash',
+    slash: 'titleNameSlash'
+  });
+  syncTitleBlock('footerWrap', {
+    num: 'footerNumberDisplay',
+    nameAr: 'footerNameArDisplay',
+    nameEn: 'footerNameEnDisplay',
+    dash: 'footerDash',
+    slash: 'footerNameSlash'
+  });
 
   document.getElementById('reversedArDisplay').textContent =
     document.getElementById('reversedAr').value;
@@ -1508,7 +1590,8 @@ function clearImage() {
   document.getElementById('imgUpload').value = '';
 }
 
-const ARABIC_EXPORT_SELECTORS = '.box-text-ar, .title-name-ar';
+const ARABIC_EXPORT_SELECTORS = '.box-text-ar, .title-name-ar, .footer-name-ar';
+const LABEL_EXPORT_SELECTOR = '.box-label';
 
 function wrapCanvasLines(ctx, text, maxWidth) {
   const words = text.split(/\s+/).filter(Boolean);
@@ -1533,11 +1616,63 @@ async function loadArabicExportFonts() {
   const specs = [
     `400 ${d.sizeRevAr}px Amiri`,
     `400 ${d.sizeUpAr}px Amiri`,
-    `700 ${d.sizeTitleNameAr}px Amiri`
+    `700 ${d.sizeTitleNameAr}px Amiri`,
+    `700 ${d.sizeFooterNum}px Amiri`,
+    `700 ${d.sizeBoxLabel}px Amiri`,
+    `700 ${d.sizeBoxLabel}px "Crimson Text"`
   ];
   if (!document.fonts) return;
   await Promise.all(specs.map(s => document.fonts.load(s).catch(() => {})));
   await document.fonts.ready;
+}
+
+async function rasterizeBoxLabel(el, exportScale) {
+  const arSpan = el.querySelector('.label-ar');
+  if (!arSpan || el.querySelector('.label-ar-img')) return;
+
+  const arText = arSpan.textContent.trim();
+  if (!arText) return;
+
+  const style = getComputedStyle(el);
+  const fontSize = parseFloat(style.fontSize) || 10.5;
+  const color = style.color || '#8b6914';
+  const scale = exportScale;
+  const fontSpec = `700 ${fontSize * scale}px Amiri, serif`;
+
+  const measureCanvas = document.createElement('canvas');
+  const mctx = measureCanvas.getContext('2d');
+  mctx.font = fontSpec;
+  mctx.direction = 'rtl';
+  const textW = mctx.measureText(arText).width;
+  const w = Math.ceil(textW + 8);
+  const h = Math.ceil(fontSize * scale * 1.45);
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = w;
+  canvas.height = h;
+  ctx.font = fontSpec;
+  ctx.fillStyle = color;
+  ctx.direction = 'rtl';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText(arText, w / 2, 1);
+
+  const arImg = document.createElement('img');
+  arImg.className = 'label-ar-img';
+  arImg.alt = '';
+  arImg.src = canvas.toDataURL('image/png');
+  arImg.style.width = (w / scale) + 'px';
+  arImg.style.height = (h / scale) + 'px';
+
+  await new Promise(resolve => {
+    arImg.onload = resolve;
+    arImg.onerror = resolve;
+    if (arImg.complete) resolve();
+  });
+
+  arSpan.replaceWith(arImg);
+  el.classList.add('ar-rasterized');
 }
 
 async function rasterizeArabicElement(el, exportScale) {
@@ -1548,7 +1683,7 @@ async function rasterizeArabicElement(el, exportScale) {
   const fontSize = parseFloat(style.fontSize) || 14;
   const fontWeight = style.fontWeight || '400';
   const color = style.color || '#3d2b1f';
-  const isInline = el.classList.contains('title-name-ar');
+  const isInline = el.classList.contains('title-name-ar') || el.classList.contains('footer-name-ar');
   const maxWidth = el.clientWidth || el.parentElement?.clientWidth || 560;
   const lineHeight = (parseFloat(style.lineHeight) || fontSize * 1.55);
   const withPipe = el.classList.contains('box-text-ar') ? '| ' + raw : raw;
@@ -1617,6 +1752,10 @@ async function rasterizeArabicIn(root, exportScale) {
   for (const el of elements) {
     await rasterizeArabicElement(el, exportScale);
   }
+  const labels = root.querySelectorAll(LABEL_EXPORT_SELECTOR);
+  for (const el of labels) {
+    await rasterizeBoxLabel(el, exportScale);
+  }
 }
 
 async function exportCard() {
@@ -1666,6 +1805,22 @@ async function exportCard() {
     }
 
     await rasterizeArabicIn(clone, EXPORT_SCALE);
+
+    clone.querySelectorAll('.card-reversed').forEach(frame => {
+      const inner = frame.querySelector('.deco-frame-inner');
+      if (!inner) return;
+      frame.style.transform = 'none';
+      inner.style.transform = 'rotate(180deg)';
+      inner.style.transformOrigin = 'center center';
+    });
+
+    const footerTitle = clone.querySelector('.footer-title');
+    const footerWrap = clone.querySelector('#footerWrap');
+    if (footerTitle && footerWrap && footerWrap.style.display !== 'none') {
+      footerTitle.style.transform = 'none';
+      footerWrap.style.transform = 'rotate(180deg)';
+      footerWrap.style.display = 'inline-block';
+    }
 
     const d = getDesign();
     const canvasOpts = {
