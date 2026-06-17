@@ -16,21 +16,79 @@ body {
   background: #1a1a2e;
   color: #e8dcc8;
   min-height: 100vh;
+  height: 100vh;
   display: flex;
+  flex-direction: row;
   gap: 0;
+  overflow: hidden;
 }
 
 /* ── SIDEBAR ── */
 .sidebar {
-  width: 400px;
-  min-width: 400px;
+  width: 420px;
+  min-width: 420px;
+  max-width: 42vw;
   background: #12121f;
-  border-left: 1px solid #3a3060;
-  padding: 20px 16px;
-  overflow-y: auto;
+  border-inline-end: 1px solid #3a3060;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.preview-area {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  background: #0f0f1a;
+  overflow: auto;
+  height: 100vh;
+}
+
+.sidebar-header {
+  flex-shrink: 0;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid #3a3060;
+  background: #12121f;
+}
+
+.sidebar-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 12px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #C8A96E #1a1a2e;
+  overscroll-behavior: contain;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 9px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: #1a1a2e;
+  border-radius: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C8A96E, #a8893e);
+  border-radius: 5px;
+  border: 2px solid #1a1a2e;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: #C8A96E;
 }
 
 .sidebar h1 {
@@ -39,8 +97,8 @@ body {
   color: #C8A96E;
   text-align: center;
   letter-spacing: 1px;
-  border-bottom: 1px solid #3a3060;
-  padding-bottom: 16px;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .sidebar h1 span {
@@ -55,15 +113,15 @@ body {
 .field-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .field-group label {
   font-size: 12px;
   color: #C8A96E;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
 }
 
 .field-group input,
@@ -88,29 +146,61 @@ body {
   border-color: #C8A96E;
 }
 
+.field-group input[dir="ltr"],
+.field-group textarea[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
 .field-group textarea { min-height: 60px; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #a89878;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #C8A96E;
+  cursor: pointer;
+}
+
+.field-hint {
+  font-size: 10px;
+  color: #6b5b3e;
+  line-height: 1.45;
+  margin-top: -4px;
+}
 
 .sidebar-panel {
   border: 1px solid #2a2040;
   border-radius: 10px;
   overflow: hidden;
   background: #16162a;
+  flex-shrink: 0;
 }
 
 .sidebar-panel summary {
-  padding: 12px 14px;
+  padding: 11px 14px;
   background: #1a1a30;
   cursor: pointer;
   font-size: 12px;
   font-weight: 700;
   color: #C8A96E;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.2px;
   list-style: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   user-select: none;
+  line-height: 1.45;
 }
 
 .sidebar-panel summary::-webkit-details-marker { display: none; }
@@ -119,16 +209,22 @@ body {
   content: '▾';
   font-size: 11px;
   color: #8b7a5e;
+  flex-shrink: 0;
   transition: transform 0.2s;
+  width: 14px;
+  text-align: center;
 }
 
-.sidebar-panel:not([open]) summary::after { transform: rotate(-90deg); }
+.sidebar-panel:not([open]) summary::after {
+  transform: rotate(90deg);
+}
 
 .panel-body {
-  padding: 14px;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
+  border-top: 1px solid #2a2040;
 }
 
 .control-row {
@@ -160,7 +256,7 @@ body {
 
 .color-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
@@ -168,14 +264,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-width: 0;
 }
 
 .color-field label {
-  font-size: 10px;
+  font-size: 11px;
   color: #a89878;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.2px;
+  line-height: 1.35;
 }
 
 .color-input-wrap {
@@ -186,11 +283,13 @@ body {
   border: 1px solid #3a3060;
   border-radius: 6px;
   padding: 6px 8px;
+  min-width: 0;
 }
 
 .color-input-wrap input[type="color"] {
   width: 32px;
   height: 28px;
+  flex-shrink: 0;
   padding: 0;
   border: none;
   background: none;
@@ -207,9 +306,81 @@ body {
   font-family: monospace;
   padding: 2px 0;
   min-width: 0;
+  direction: ltr;
+  text-align: left;
 }
 
 .color-input-wrap input[type="text"]:focus { outline: none; }
+
+.element-style {
+  background: #1a1a30;
+  border: 1px solid #2a2040;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.element-style-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #C8A96E;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.element-style-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.element-style-controls input[type="range"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  accent-color: #C8A96E;
+  height: 4px;
+}
+
+.element-style-controls .size-val {
+  font-size: 10px;
+  color: #a89878;
+  font-variant-numeric: tabular-nums;
+  min-width: 40px;
+  text-align: end;
+  flex-shrink: 0;
+}
+
+.element-style-controls input[type="color"] {
+  width: 34px;
+  height: 30px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 1px solid #3a3060;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+}
+
+.style-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #8b7a5e;
+  letter-spacing: 0.3px;
+  padding-top: 6px;
+  border-top: 1px solid #2a2040;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.panel-body > .style-section-title:first-child {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
 
 .btn-row {
   display: flex;
@@ -277,24 +448,18 @@ body {
   color: #8b7a5e;
   border: 1px solid #3a3060;
   border-radius: 8px;
-  padding: 10px;
+  padding: 10px 12px;
   font-size: 13px;
   cursor: pointer;
   width: 100%;
   transition: all 0.2s;
+  line-height: 1.35;
 }
 
 .btn-reset:hover { border-color: #C8A96E; color: #C8A96E; }
 
 /* ── PREVIEW AREA ── */
-.preview-area {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 40px;
-  background: #0f0f1a;
-}
+/* (defined above with .sidebar in body flex layout) */
 
 /* ── TAROT CARD ── */
 .tarot-card {
@@ -304,11 +469,28 @@ body {
   --gold-light: #e8d5a3;
   --gold-dark: #8b6914;
   --illus-bg: #f5edd8;
-  --text-color: #3d2b1f;
-  --title-size: 25px;
-  --text-en-size: 13.5px;
-  --text-ar-size: 14px;
-  --footer-size: 28px;
+  --img-scale: 1;
+  --img-pos-x: 50%;
+  --img-pos-y: 50%;
+  --img-fit: cover;
+  --title-num-size: 25px;
+  --title-num-color: #3d2b1f;
+  --title-name-ar-size: 25px;
+  --title-name-ar-color: #3d2b1f;
+  --title-name-en-size: 25px;
+  --title-name-en-color: #3d2b1f;
+  --footer-num-size: 28px;
+  --footer-num-color: #3d2b1f;
+  --rev-en-size: 13.5px;
+  --rev-en-color: #3d2b1f;
+  --rev-ar-size: 14px;
+  --rev-ar-color: #3d2b1f;
+  --up-en-size: 13.5px;
+  --up-en-color: #3d2b1f;
+  --up-ar-size: 14px;
+  --up-ar-color: #3d2b1f;
+  --label-size: 10.5px;
+  --label-color: #8b6914;
   --line-en: 1.48;
   --line-ar: 1.55;
   width: 700px;
@@ -362,9 +544,6 @@ body {
 
 .card-header .title-text {
   font-family: 'Crimson Text', Georgia, serif;
-  font-size: var(--title-size);
-  font-weight: 700;
-  color: var(--text-color);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -373,7 +552,30 @@ body {
   direction: ltr;
   unicode-bidi: plaintext;
   letter-spacing: 0.2px;
+  line-height: 1.2;
 }
+
+.title-number {
+  font-size: var(--title-num-size);
+  color: var(--title-num-color);
+  font-weight: 700;
+}
+
+.title-name-ar {
+  font-family: 'Amiri', 'Crimson Text', Georgia, serif;
+  font-size: var(--title-name-ar-size);
+  color: var(--title-name-ar-color);
+  font-weight: 700;
+}
+
+.title-name-en {
+  font-size: var(--title-name-en-size);
+  color: var(--title-name-en-color);
+  font-weight: 700;
+}
+
+.title-star { color: var(--title-num-color); font-weight: 700; }
+.title-dash, .title-name-slash { opacity: 0.7; }
 
 /* Decorative text frame */
 .deco-frame {
@@ -416,11 +618,11 @@ body {
 
 .box-label {
   font-family: 'Crimson Text', Georgia, serif;
-  font-size: 10.5px;
+  font-size: var(--label-size);
   font-weight: 700;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: var(--gold-dark);
+  color: var(--label-color);
   margin-bottom: 8px;
   line-height: 1;
   transition: opacity 0.2s;
@@ -457,10 +659,8 @@ body {
   line-height: 1;
 }
 
-.box-text-en {
+#reversedEnDisplay, #uprightEnDisplay {
   font-family: 'Crimson Text', Georgia, serif;
-  font-size: var(--text-en-size);
-  color: var(--text-color);
   text-align: center;
   width: 100%;
   direction: ltr;
@@ -470,12 +670,18 @@ body {
   padding: 0 4px;
 }
 
-.box-text-en:empty { display: none; }
+#reversedEnDisplay {
+  font-size: var(--rev-en-size);
+  color: var(--rev-en-color);
+}
 
-.box-text-ar {
+#uprightEnDisplay {
+  font-size: var(--up-en-size);
+  color: var(--up-en-color);
+}
+
+#reversedArDisplay, #uprightArDisplay {
   font-family: 'Amiri', 'Crimson Text', Georgia, serif;
-  font-size: var(--text-ar-size);
-  color: var(--text-color);
   text-align: center;
   width: 100%;
   direction: rtl;
@@ -484,13 +690,35 @@ body {
   padding: 0 4px;
 }
 
-.box-text-ar:empty { display: none; }
+#reversedArDisplay {
+  font-size: var(--rev-ar-size);
+  color: var(--rev-ar-color);
+}
+
+#uprightArDisplay {
+  font-size: var(--up-ar-size);
+  color: var(--up-ar-color);
+}
+
+.box-text-en:empty, .box-text-ar:empty { display: none; }
 
 .box-text-ar:not(:empty)::before {
   content: '| ';
   font-weight: 700;
-  color: var(--gold-dark);
+  color: var(--label-color);
   opacity: 0.85;
+}
+
+.box-text-ar.ar-rasterized::before,
+.title-name-ar.ar-rasterized::before {
+  display: none;
+  content: none;
+}
+
+.ar-raster-img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* Reversed — rotated 180° for upside-down reading */
@@ -545,8 +773,10 @@ body {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: var(--img-fit);
+  object-position: var(--img-pos-x) var(--img-pos-y);
+  transform: scale(var(--img-scale));
+  transform-origin: center center;
   display: none;
   z-index: 2;
 }
@@ -594,17 +824,21 @@ body {
 }
 
 .footer-ornament {
-  font-size: calc(var(--footer-size) * 0.65);
-  color: var(--text-color);
+  font-size: calc(var(--footer-num-size) * 0.65);
+  color: var(--footer-num-color);
   line-height: 1;
   opacity: 0.85;
 }
 
+.footer-ornament.is-hidden {
+  display: none;
+}
+
 .footer-number {
   font-family: 'Crimson Text', Georgia, serif;
-  font-size: var(--footer-size);
+  font-size: var(--footer-num-size);
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--footer-num-color);
   line-height: 1;
 }
 
@@ -627,10 +861,13 @@ body {
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <h1>
-    🎴 Tarot Card Builder
-    <span>Arabic Edition — بناء كروت التاروت</span>
-  </h1>
+  <div class="sidebar-header">
+    <h1>
+      🎴 Tarot Card Builder
+      <span>Arabic Edition — بناء كروت التاروت</span>
+    </h1>
+  </div>
+  <div class="sidebar-scroll">
 
   <details class="sidebar-panel" open>
     <summary>① معلومات الكرت / Card Info</summary>
@@ -645,12 +882,12 @@ body {
       </div>
       <div class="field-group">
         <label>Card Name in English</label>
-        <input type="text" id="nameEn" placeholder="The Magician" value="" oninput="updateCard()">
+        <input type="text" id="nameEn" dir="ltr" placeholder="The Magician" value="" oninput="updateCard()">
       </div>
     </div>
   </details>
 
-  <details class="sidebar-panel" open>
+  <details class="sidebar-panel">
     <summary>② المعكوس / Reversed</summary>
     <div class="panel-body">
       <div class="field-group">
@@ -659,12 +896,12 @@ body {
       </div>
       <div class="field-group">
         <label>Explanation in English</label>
-        <textarea id="reversedEn" placeholder="Recklessness, poor judgment..." oninput="updateCard()"></textarea>
+        <textarea id="reversedEn" dir="ltr" placeholder="Recklessness, poor judgment..." oninput="updateCard()"></textarea>
       </div>
     </div>
   </details>
 
-  <details class="sidebar-panel" open>
+  <details class="sidebar-panel">
     <summary>③ الصحيح / Upright</summary>
     <div class="panel-body">
       <div class="field-group">
@@ -673,12 +910,12 @@ body {
       </div>
       <div class="field-group">
         <label>Explanation in English</label>
-        <textarea id="uprightEn" placeholder="New beginnings, adventure..." oninput="updateCard()"></textarea>
+        <textarea id="uprightEn" dir="ltr" placeholder="New beginnings, adventure..." oninput="updateCard()"></textarea>
       </div>
     </div>
   </details>
 
-  <details class="sidebar-panel" open>
+  <details class="sidebar-panel">
     <summary>④ الصورة / Illustration</summary>
     <div class="panel-body">
       <div class="upload-area" onclick="document.getElementById('imgUpload').click()">
@@ -687,33 +924,131 @@ body {
         <p>انقر لرفع صورة الكرت<br>Click to upload illustration</p>
       </div>
       <button class="btn-reset" onclick="clearImage()">🗑 إزالة الصورة / Clear Image</button>
+
+      <div class="style-section-title">ضبط الصورة · Image Fit</div>
+
+      <div class="control-row">
+        <label>التكبير <span id="valImgScale">100%</span></label>
+        <input type="range" id="imgScale" min="100" max="250" value="100" oninput="updateCard()">
+      </div>
+      <div class="control-row">
+        <label>أفقي (يمين / يسار) <span id="valImgPosX">50%</span></label>
+        <input type="range" id="imgPosX" min="0" max="100" value="50" oninput="updateCard()">
+      </div>
+      <div class="control-row">
+        <label>عمودي (أعلى / أسفل) <span id="valImgPosY">50%</span></label>
+        <input type="range" id="imgPosY" min="0" max="100" value="50" oninput="updateCard()">
+      </div>
+      <div class="field-group">
+        <label>طريقة العرض / Fit Mode</label>
+        <select id="imgFit" onchange="updateCard()">
+          <option value="cover">ملء الإطار — Cover</option>
+          <option value="contain">إظهار كامل — Contain</option>
+        </select>
+      </div>
+      <button class="btn-reset" onclick="resetImageFit()">↺ إعادة ضبط الصورة</button>
     </div>
   </details>
 
-  <details class="sidebar-panel" open>
-    <summary>⑤ الخطوط / Typography</summary>
+  <details class="sidebar-panel">
+    <summary>⑤ تنسيق النصوص / Text Styling</summary>
     <div class="panel-body">
-      <div class="control-row">
-        <label>حجم العنوان <span id="valTitleSize">25px</span></label>
-        <input type="range" id="titleSize" min="18" max="36" value="25" oninput="updateCard()">
+      <div class="style-section-title">العنوان · Header</div>
+
+      <div class="element-style">
+        <div class="element-style-name">رقم الكرت — العنوان</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeTitleNum" min="14" max="40" value="25" oninput="updateCard()">
+          <span class="size-val" id="valSizeTitleNum">25px</span>
+          <input type="color" id="colorTitleNum" value="#3d2b1f" oninput="updateCard()">
+        </div>
       </div>
-      <div class="control-row">
-        <label>النص الإنجليزي <span id="valTextEnSize">13.5px</span></label>
-        <input type="range" id="textEnSize" min="10" max="20" step="0.5" value="13.5" oninput="updateCard()">
+      <div class="element-style">
+        <div class="element-style-name">اسم الكرت — عربي</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeTitleNameAr" min="14" max="40" value="25" oninput="updateCard()">
+          <span class="size-val" id="valSizeTitleNameAr">25px</span>
+          <input type="color" id="colorTitleNameAr" value="#3d2b1f" oninput="updateCard()">
+        </div>
       </div>
-      <div class="control-row">
-        <label>النص العربي <span id="valTextArSize">14px</span></label>
-        <input type="range" id="textArSize" min="10" max="22" step="0.5" value="14" oninput="updateCard()">
+      <div class="element-style">
+        <div class="element-style-name">اسم الكرت — English</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeTitleNameEn" min="14" max="40" value="25" oninput="updateCard()">
+          <span class="size-val" id="valSizeTitleNameEn">25px</span>
+          <input type="color" id="colorTitleNameEn" value="#3d2b1f" oninput="updateCard()">
+        </div>
       </div>
-      <div class="control-row">
-        <label>رقم التذييل <span id="valFooterSize">28px</span></label>
-        <input type="range" id="footerSize" min="18" max="40" value="28" oninput="updateCard()">
+
+      <div class="style-section-title">التذييل · Footer</div>
+      <div class="element-style">
+        <div class="element-style-name">رقم الكرت — التذييل</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeFooterNum" min="16" max="44" value="28" oninput="updateCard()">
+          <span class="size-val" id="valSizeFooterNum">28px</span>
+          <input type="color" id="colorFooterNum" value="#3d2b1f" oninput="updateCard()">
+        </div>
+      </div>
+      <label class="toggle-row">
+        <input type="checkbox" id="showFooterOrnament" onchange="updateCard()">
+        <span>إظهار زخرفة التذييل ❧ (اختياري)</span>
+      </label>
+      <p class="field-hint">الزخرفة ❧ عنصر زخرفي كلاسيكي من تصميم كروت التاروت — يمكن إخفاؤه.</p>
+
+      <div class="style-section-title">المعكوس · Reversed</div>
+      <div class="element-style">
+        <div class="element-style-name">الشرح — English</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeRevEn" min="9" max="22" step="0.5" value="13.5" oninput="updateCard()">
+          <span class="size-val" id="valSizeRevEn">13.5px</span>
+          <input type="color" id="colorRevEn" value="#3d2b1f" oninput="updateCard()">
+        </div>
+      </div>
+      <div class="element-style">
+        <div class="element-style-name">الشرح — عربي</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeRevAr" min="9" max="24" step="0.5" value="14" oninput="updateCard()">
+          <span class="size-val" id="valSizeRevAr">14px</span>
+          <input type="color" id="colorRevAr" value="#3d2b1f" oninput="updateCard()">
+        </div>
+      </div>
+
+      <div class="style-section-title">الصحيح · Upright</div>
+      <div class="element-style">
+        <div class="element-style-name">الشرح — English</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeUpEn" min="9" max="22" step="0.5" value="13.5" oninput="updateCard()">
+          <span class="size-val" id="valSizeUpEn">13.5px</span>
+          <input type="color" id="colorUpEn" value="#3d2b1f" oninput="updateCard()">
+        </div>
+      </div>
+      <div class="element-style">
+        <div class="element-style-name">الشرح — عربي</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeUpAr" min="9" max="24" step="0.5" value="14" oninput="updateCard()">
+          <span class="size-val" id="valSizeUpAr">14px</span>
+          <input type="color" id="colorUpAr" value="#3d2b1f" oninput="updateCard()">
+        </div>
+      </div>
+
+      <div class="style-section-title">تسميات الصناديق · Labels</div>
+      <div class="element-style">
+        <div class="element-style-name">▼ المعكوس / ▲ الصحيح</div>
+        <div class="element-style-controls">
+          <input type="range" id="sizeBoxLabel" min="8" max="16" step="0.5" value="10.5" oninput="updateCard()">
+          <span class="size-val" id="valSizeBoxLabel">10.5px</span>
+          <input type="color" id="colorBoxLabel" value="#8b6914" oninput="updateCard()">
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-reset" onclick="resetDesign()">↺ إعادة التنسيق الافتراضي</button>
       </div>
     </div>
   </details>
 
-  <details class="sidebar-panel" open>
-    <summary>⑥ الألوان / Colors</summary>
+  <details class="sidebar-panel">
+    <summary>⑥ ألوان الكرت / Card Colors</summary>
     <div class="panel-body">
       <div class="color-grid">
         <div class="color-field">
@@ -721,13 +1056,6 @@ body {
           <div class="color-input-wrap">
             <input type="color" id="colorBg" value="#fdf8e1" oninput="syncColor('colorBg'); updateCard()">
             <input type="text" id="colorBgHex" value="#fdf8e1" maxlength="7" oninput="syncHex('colorBg'); updateCard()">
-          </div>
-        </div>
-        <div class="color-field">
-          <label>لون النص</label>
-          <div class="color-input-wrap">
-            <input type="color" id="colorText" value="#3d2b1f" oninput="syncColor('colorText'); updateCard()">
-            <input type="text" id="colorTextHex" value="#3d2b1f" maxlength="7" oninput="syncHex('colorText'); updateCard()">
           </div>
         </div>
         <div class="color-field">
@@ -744,16 +1072,13 @@ body {
             <input type="text" id="colorGoldHex" value="#c9a55c" maxlength="7" oninput="syncHex('colorGold'); updateCard()">
           </div>
         </div>
-        <div class="color-field" style="grid-column: 1 / -1">
+        <div class="color-field">
           <label>خلفية الصورة</label>
           <div class="color-input-wrap">
             <input type="color" id="colorIllus" value="#f5edd8" oninput="syncColor('colorIllus'); updateCard()">
             <input type="text" id="colorIllusHex" value="#f5edd8" maxlength="7" oninput="syncHex('colorIllus'); updateCard()">
           </div>
         </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-reset" onclick="resetDesign()">↺ إعادة الألوان والخطوط</button>
       </div>
     </div>
   </details>
@@ -767,6 +1092,8 @@ body {
       <p class="export-note">700 × 1200px (1400 × 2400 @2x) — جاهز للطباعة</p>
     </div>
   </details>
+
+  </div><!-- /.sidebar-scroll -->
 </div>
 
 <!-- PREVIEW -->
@@ -797,7 +1124,17 @@ body {
       <!-- Header -->
       <div class="card-header">
         <div class="header-rule"></div>
-        <div class="title-text" id="cardTitleDisplay"></div>
+        <div class="title-text" id="cardTitleDisplay">
+          <span id="titleWrap" style="display:none">
+            <span class="title-star">★</span>
+            <span class="title-number" id="titleNumberDisplay"></span>
+            <span class="title-dash" id="titleDash"> — </span>
+            <span class="title-name-ar" id="titleNameArDisplay"></span>
+            <span class="title-name-slash" id="titleNameSlash"> / </span>
+            <span class="title-name-en" id="titleNameEnDisplay"></span>
+            <span class="title-star">★</span>
+          </span>
+        </div>
         <div class="header-rule"></div>
       </div>
 
@@ -859,7 +1196,7 @@ body {
 
       <!-- Footer -->
       <div class="card-footer">
-        <div class="footer-ornament">❧</div>
+        <div class="footer-ornament is-hidden" id="footerOrnament">❧</div>
         <div class="footer-number" id="footerNumberDisplay"></div>
       </div>
 
@@ -869,16 +1206,46 @@ body {
 
 <script>
 const DESIGN_DEFAULTS = {
-  titleSize: 25,
-  textEnSize: 13.5,
-  textArSize: 14,
-  footerSize: 28,
+  sizeTitleNum: 25,
+  colorTitleNum: '#3d2b1f',
+  sizeTitleNameAr: 25,
+  colorTitleNameAr: '#3d2b1f',
+  sizeTitleNameEn: 25,
+  colorTitleNameEn: '#3d2b1f',
+  sizeFooterNum: 28,
+  colorFooterNum: '#3d2b1f',
+  sizeRevEn: 13.5,
+  colorRevEn: '#3d2b1f',
+  sizeRevAr: 14,
+  colorRevAr: '#3d2b1f',
+  sizeUpEn: 13.5,
+  colorUpEn: '#3d2b1f',
+  sizeUpAr: 14,
+  colorUpAr: '#3d2b1f',
+  sizeBoxLabel: 10.5,
+  colorBoxLabel: '#8b6914',
   colorBg: '#fdf8e1',
-  colorText: '#3d2b1f',
   colorBorder: '#3d2b1f',
   colorGold: '#c9a55c',
-  colorIllus: '#f5edd8'
+  colorIllus: '#f5edd8',
+  imgScale: 100,
+  imgPosX: 50,
+  imgPosY: 50,
+  imgFit: 'cover',
+  showFooterOrnament: false
 };
+
+const STYLE_FIELDS = [
+  ['sizeTitleNum', 'colorTitleNum', 'valSizeTitleNum'],
+  ['sizeTitleNameAr', 'colorTitleNameAr', 'valSizeTitleNameAr'],
+  ['sizeTitleNameEn', 'colorTitleNameEn', 'valSizeTitleNameEn'],
+  ['sizeFooterNum', 'colorFooterNum', 'valSizeFooterNum'],
+  ['sizeRevEn', 'colorRevEn', 'valSizeRevEn'],
+  ['sizeRevAr', 'colorRevAr', 'valSizeRevAr'],
+  ['sizeUpEn', 'colorUpEn', 'valSizeUpEn'],
+  ['sizeUpAr', 'colorUpAr', 'valSizeUpAr'],
+  ['sizeBoxLabel', 'colorBoxLabel', 'valSizeBoxLabel']
+];
 
 function lightenHex(hex, amount) {
   const n = parseInt(hex.slice(1), 16);
@@ -913,32 +1280,56 @@ function syncHex(id) {
 }
 
 function getDesign() {
-  return {
-    titleSize: document.getElementById('titleSize').value,
-    textEnSize: document.getElementById('textEnSize').value,
-    textArSize: document.getElementById('textArSize').value,
-    footerSize: document.getElementById('footerSize').value,
+  const d = {
+    sizeTitleNum: document.getElementById('sizeTitleNum').value,
+    colorTitleNum: document.getElementById('colorTitleNum').value,
+    sizeTitleNameAr: document.getElementById('sizeTitleNameAr').value,
+    colorTitleNameAr: document.getElementById('colorTitleNameAr').value,
+    sizeTitleNameEn: document.getElementById('sizeTitleNameEn').value,
+    colorTitleNameEn: document.getElementById('colorTitleNameEn').value,
+    sizeFooterNum: document.getElementById('sizeFooterNum').value,
+    colorFooterNum: document.getElementById('colorFooterNum').value,
+    sizeRevEn: document.getElementById('sizeRevEn').value,
+    colorRevEn: document.getElementById('colorRevEn').value,
+    sizeRevAr: document.getElementById('sizeRevAr').value,
+    colorRevAr: document.getElementById('colorRevAr').value,
+    sizeUpEn: document.getElementById('sizeUpEn').value,
+    colorUpEn: document.getElementById('colorUpEn').value,
+    sizeUpAr: document.getElementById('sizeUpAr').value,
+    colorUpAr: document.getElementById('colorUpAr').value,
+    sizeBoxLabel: document.getElementById('sizeBoxLabel').value,
+    colorBoxLabel: document.getElementById('colorBoxLabel').value,
     colorBg: isValidHex(document.getElementById('colorBgHex').value)
       ? document.getElementById('colorBgHex').value : DESIGN_DEFAULTS.colorBg,
-    colorText: isValidHex(document.getElementById('colorTextHex').value)
-      ? document.getElementById('colorTextHex').value : DESIGN_DEFAULTS.colorText,
     colorBorder: isValidHex(document.getElementById('colorBorderHex').value)
       ? document.getElementById('colorBorderHex').value : DESIGN_DEFAULTS.colorBorder,
     colorGold: isValidHex(document.getElementById('colorGoldHex').value)
       ? document.getElementById('colorGoldHex').value : DESIGN_DEFAULTS.colorGold,
     colorIllus: isValidHex(document.getElementById('colorIllusHex').value)
-      ? document.getElementById('colorIllusHex').value : DESIGN_DEFAULTS.colorIllus
+      ? document.getElementById('colorIllusHex').value : DESIGN_DEFAULTS.colorIllus,
+    imgScale: document.getElementById('imgScale').value,
+    imgPosX: document.getElementById('imgPosX').value,
+    imgPosY: document.getElementById('imgPosY').value,
+    imgFit: document.getElementById('imgFit').value,
+    showFooterOrnament: document.getElementById('showFooterOrnament').checked
   };
+  return d;
 }
 
 function applyDesign(root) {
   const card = root || document.getElementById('tarotCard');
   const d = getDesign();
+  const updateLabels = !root;
 
-  document.getElementById('valTitleSize').textContent = d.titleSize + 'px';
-  document.getElementById('valTextEnSize').textContent = d.textEnSize + 'px';
-  document.getElementById('valTextArSize').textContent = d.textArSize + 'px';
-  document.getElementById('valFooterSize').textContent = d.footerSize + 'px';
+  if (updateLabels) {
+    STYLE_FIELDS.forEach(([sizeId, , valId]) => {
+      const el = document.getElementById(valId);
+      if (el) el.textContent = d[sizeId] + 'px';
+    });
+    document.getElementById('valImgScale').textContent = d.imgScale + '%';
+    document.getElementById('valImgPosX').textContent = d.imgPosX + '%';
+    document.getElementById('valImgPosY').textContent = d.imgPosY + '%';
+  }
 
   card.style.setProperty('--cream', d.colorBg);
   card.style.setProperty('--brown', d.colorBorder);
@@ -946,11 +1337,41 @@ function applyDesign(root) {
   card.style.setProperty('--gold-light', lightenHex(d.colorGold, 40));
   card.style.setProperty('--gold-dark', darkenHex(d.colorGold, 30));
   card.style.setProperty('--illus-bg', d.colorIllus);
-  card.style.setProperty('--text-color', d.colorText);
-  card.style.setProperty('--title-size', d.titleSize + 'px');
-  card.style.setProperty('--text-en-size', d.textEnSize + 'px');
-  card.style.setProperty('--text-ar-size', d.textArSize + 'px');
-  card.style.setProperty('--footer-size', d.footerSize + 'px');
+
+  card.style.setProperty('--title-num-size', d.sizeTitleNum + 'px');
+  card.style.setProperty('--title-num-color', d.colorTitleNum);
+  card.style.setProperty('--title-name-ar-size', d.sizeTitleNameAr + 'px');
+  card.style.setProperty('--title-name-ar-color', d.colorTitleNameAr);
+  card.style.setProperty('--title-name-en-size', d.sizeTitleNameEn + 'px');
+  card.style.setProperty('--title-name-en-color', d.colorTitleNameEn);
+  card.style.setProperty('--footer-num-size', d.sizeFooterNum + 'px');
+  card.style.setProperty('--footer-num-color', d.colorFooterNum);
+  card.style.setProperty('--rev-en-size', d.sizeRevEn + 'px');
+  card.style.setProperty('--rev-en-color', d.colorRevEn);
+  card.style.setProperty('--rev-ar-size', d.sizeRevAr + 'px');
+  card.style.setProperty('--rev-ar-color', d.colorRevAr);
+  card.style.setProperty('--up-en-size', d.sizeUpEn + 'px');
+  card.style.setProperty('--up-en-color', d.colorUpEn);
+  card.style.setProperty('--up-ar-size', d.sizeUpAr + 'px');
+  card.style.setProperty('--up-ar-color', d.colorUpAr);
+  card.style.setProperty('--label-size', d.sizeBoxLabel + 'px');
+  card.style.setProperty('--label-color', d.colorBoxLabel);
+  card.style.setProperty('--img-scale', d.imgScale / 100);
+  card.style.setProperty('--img-pos-x', d.imgPosX + '%');
+  card.style.setProperty('--img-pos-y', d.imgPosY + '%');
+  card.style.setProperty('--img-fit', d.imgFit);
+
+  const ornament = card.querySelector('#footerOrnament');
+  if (ornament) {
+    ornament.classList.toggle('is-hidden', !d.showFooterOrnament);
+  }
+
+  const img = card.querySelector('#illustImg');
+  if (img) {
+    img.style.objectFit = d.imgFit;
+    img.style.objectPosition = d.imgPosX + '% ' + d.imgPosY + '%';
+    img.style.transform = 'scale(' + (d.imgScale / 100) + ')';
+  }
 
   card.querySelectorAll('.svg-border-outer, .svg-border-inner').forEach(el => {
     el.setAttribute('stroke', d.colorBorder);
@@ -998,12 +1419,21 @@ function updateCard() {
   const nameAr = document.getElementById('nameAr').value;
   const nameEn = document.getElementById('nameEn').value;
 
-  const titleParts = [];
-  if (num) titleParts.push(num);
-  const names = [nameAr, nameEn].filter(Boolean).join(' / ');
-  if (names) titleParts.push(names);
-  document.getElementById('cardTitleDisplay').textContent =
-    titleParts.length ? `★ ${titleParts.join(' — ')} ★` : '';
+  const titleWrap = document.getElementById('titleWrap');
+  const hasTitle = num || nameAr || nameEn;
+  titleWrap.style.display = hasTitle ? 'inline' : 'none';
+
+  document.getElementById('titleNumberDisplay').textContent = num;
+  document.getElementById('titleNameArDisplay').textContent = nameAr;
+  document.getElementById('titleNameEnDisplay').textContent = nameEn;
+  document.getElementById('titleDash').style.display =
+    num && (nameAr || nameEn) ? 'inline' : 'none';
+  document.getElementById('titleNameSlash').style.display =
+    nameAr && nameEn ? 'inline' : 'none';
+  document.getElementById('titleNumberDisplay').style.display = num ? 'inline' : 'none';
+  document.getElementById('titleNameArDisplay').style.display = nameAr ? 'inline' : 'none';
+  document.getElementById('titleNameEnDisplay').style.display = nameEn ? 'inline' : 'none';
+
   document.getElementById('footerNumberDisplay').textContent = num;
 
   document.getElementById('reversedArDisplay').textContent =
@@ -1022,16 +1452,26 @@ function updateCard() {
 }
 
 function resetDesign() {
-  document.getElementById('titleSize').value = DESIGN_DEFAULTS.titleSize;
-  document.getElementById('textEnSize').value = DESIGN_DEFAULTS.textEnSize;
-  document.getElementById('textArSize').value = DESIGN_DEFAULTS.textArSize;
-  document.getElementById('footerSize').value = DESIGN_DEFAULTS.footerSize;
+  STYLE_FIELDS.forEach(([sizeId, colorId]) => {
+    document.getElementById(sizeId).value = DESIGN_DEFAULTS[sizeId];
+    document.getElementById(colorId).value = DESIGN_DEFAULTS[colorId];
+  });
 
-  ['colorBg', 'colorText', 'colorBorder', 'colorGold', 'colorIllus'].forEach(id => {
+  ['colorBg', 'colorBorder', 'colorGold', 'colorIllus'].forEach(id => {
     document.getElementById(id).value = DESIGN_DEFAULTS[id];
     document.getElementById(id + 'Hex').value = DESIGN_DEFAULTS[id];
   });
 
+  document.getElementById('showFooterOrnament').checked = DESIGN_DEFAULTS.showFooterOrnament;
+
+  updateCard();
+}
+
+function resetImageFit() {
+  document.getElementById('imgScale').value = DESIGN_DEFAULTS.imgScale;
+  document.getElementById('imgPosX').value = DESIGN_DEFAULTS.imgPosX;
+  document.getElementById('imgPosY').value = DESIGN_DEFAULTS.imgPosY;
+  document.getElementById('imgFit').value = DESIGN_DEFAULTS.imgFit;
   updateCard();
 }
 
@@ -1066,6 +1506,117 @@ function clearImage() {
   img.onerror = null;
   document.getElementById('illustPlaceholder').style.display = 'flex';
   document.getElementById('imgUpload').value = '';
+}
+
+const ARABIC_EXPORT_SELECTORS = '.box-text-ar, .title-name-ar';
+
+function wrapCanvasLines(ctx, text, maxWidth) {
+  const words = text.split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+  const lines = [];
+  let line = words[0];
+  for (let i = 1; i < words.length; i++) {
+    const trial = line + ' ' + words[i];
+    if (ctx.measureText(trial).width > maxWidth && line) {
+      lines.push(line);
+      line = words[i];
+    } else {
+      line = trial;
+    }
+  }
+  lines.push(line);
+  return lines;
+}
+
+async function loadArabicExportFonts() {
+  const d = getDesign();
+  const specs = [
+    `400 ${d.sizeRevAr}px Amiri`,
+    `400 ${d.sizeUpAr}px Amiri`,
+    `700 ${d.sizeTitleNameAr}px Amiri`
+  ];
+  if (!document.fonts) return;
+  await Promise.all(specs.map(s => document.fonts.load(s).catch(() => {})));
+  await document.fonts.ready;
+}
+
+async function rasterizeArabicElement(el, exportScale) {
+  const raw = el.textContent.trim();
+  if (!raw) return;
+
+  const style = getComputedStyle(el);
+  const fontSize = parseFloat(style.fontSize) || 14;
+  const fontWeight = style.fontWeight || '400';
+  const color = style.color || '#3d2b1f';
+  const isInline = el.classList.contains('title-name-ar');
+  const maxWidth = el.clientWidth || el.parentElement?.clientWidth || 560;
+  const lineHeight = (parseFloat(style.lineHeight) || fontSize * 1.55);
+  const withPipe = el.classList.contains('box-text-ar') ? '| ' + raw : raw;
+  const scale = exportScale;
+  const fontSpec = `${fontWeight} ${fontSize * scale}px Amiri, serif`;
+
+  const measureCanvas = document.createElement('canvas');
+  const measureCtx = measureCanvas.getContext('2d');
+  measureCtx.font = fontSpec;
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  let lines;
+
+  if (isInline) {
+    lines = [withPipe];
+    canvas.width = Math.ceil(measureCtx.measureText(withPipe).width + 8);
+    canvas.height = Math.ceil(fontSize * scale * 1.35);
+  } else {
+    lines = wrapCanvasLines(measureCtx, withPipe, maxWidth * scale);
+    if (!lines.length) return;
+    canvas.width = Math.ceil(maxWidth * scale);
+    canvas.height = Math.ceil(lines.length * lineHeight * scale + 4);
+  }
+
+  ctx.font = fontSpec;
+  ctx.fillStyle = color;
+  ctx.textBaseline = 'top';
+  ctx.direction = 'rtl';
+
+  if (isInline) {
+    ctx.textAlign = 'right';
+    ctx.fillText(lines[0], canvas.width - 4, 2);
+  } else {
+    ctx.textAlign = 'center';
+    lines.forEach((line, i) => {
+      ctx.fillText(line, canvas.width / 2, i * lineHeight * scale);
+    });
+  }
+
+  const img = document.createElement('img');
+  img.className = 'ar-raster-img';
+  img.alt = '';
+  img.src = canvas.toDataURL('image/png');
+
+  await new Promise(resolve => {
+    img.onload = resolve;
+    img.onerror = resolve;
+    if (img.complete) resolve();
+  });
+
+  if (isInline) {
+    img.style.display = 'inline';
+    img.style.verticalAlign = 'middle';
+    img.style.width = (canvas.width / scale) + 'px';
+    img.style.height = (canvas.height / scale) + 'px';
+  }
+
+  el.textContent = '';
+  el.classList.add('ar-rasterized');
+  el.appendChild(img);
+}
+
+async function rasterizeArabicIn(root, exportScale) {
+  const elements = root.querySelectorAll(ARABIC_EXPORT_SELECTORS);
+  for (const el of elements) {
+    await rasterizeArabicElement(el, exportScale);
+  }
 }
 
 async function exportCard() {
@@ -1105,9 +1656,7 @@ async function exportCard() {
   document.body.appendChild(host);
 
   try {
-    if (document.fonts && document.fonts.ready) {
-      await document.fonts.ready;
-    }
+    await loadArabicExportFonts();
 
     if (hasImage && cloneImg && !cloneImg.complete) {
       await new Promise((resolve, reject) => {
@@ -1116,17 +1665,27 @@ async function exportCard() {
       });
     }
 
+    await rasterizeArabicIn(clone, EXPORT_SCALE);
+
     const d = getDesign();
-    const canvas = await html2canvas(clone, {
+    const canvasOpts = {
       width: EXPORT_W,
       height: EXPORT_H,
       scale: EXPORT_SCALE,
       useCORS: true,
+      allowTaint: true,
       backgroundColor: d.colorBg,
       logging: false,
       scrollX: 0,
       scrollY: 0
-    });
+    };
+
+    let canvas;
+    try {
+      canvas = await html2canvas(clone, { ...canvasOpts, foreignObjectRendering: true });
+    } catch (e1) {
+      canvas = await html2canvas(clone, { ...canvasOpts, foreignObjectRendering: false });
+    }
 
     const num = document.getElementById('cardNumber').value || 'card';
     const nameEn = document.getElementById('nameEn').value || 'tarot';
